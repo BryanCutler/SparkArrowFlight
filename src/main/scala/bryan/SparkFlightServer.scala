@@ -22,18 +22,6 @@ class SparkFlightServer(incomingAllocator: BufferAllocator, val location: Locati
   override def close(): Unit = {
     AutoCloseables.close(flightServer, mem, allocator)
   }
-
-  /*
-  class SparkProducer() extends FlightProducer {
-    override def getStream(ticket: Ticket, serverStreamListener: ServerStreamListener): Unit = {  }
-    override def listFlights(criteria: Criteria, streamListener: StreamListener[FlightInfo]): Unit = {  }
-    override def getFlightInfo(flightDescriptor: FlightDescriptor): FlightInfo = {  }
-    override def acceptPut(flightStream: FlightStream): Callable[Flight.PutResult] = {  }
-    override def doAction(action: Action): Result = {  }
-    override def listActions(streamListener: StreamListener[ActionType]): Unit = {  }
-  }
-  */
-
 }
 
 object SparkFlightServer {
