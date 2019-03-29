@@ -2,9 +2,10 @@
 
 # Using tfio-test env
 
-SPARK_HOME=/home/bryan/git/spark
+SPARK_HOME=$HOME/git/spark
+M2_LOCAL_REPO=$HOME/.m2/repository
 
 PYSPARK_PYTHON=`which python` $SPARK_HOME/bin/spark-submit \
-    --jars "/home/bryan/projects/SparkArrowFlight/target/FlightConnector-1.0-SNAPSHOT.jar,/home/bryan/.m2/repository/org/apache/arrow/arrow-flight/0.13.0-SNAPSHOT/arrow-flight-0.13.0-SNAPSHOT-shaded.jar,/home/bryan/.m2/repository/org/apache/arrow/arrow-flight/0.13.0-SNAPSHOT/arrow-flight-0.13.0-SNAPSHOT-jar-with-dependencies.jar" \
-    --py-files "/home/bryan/projects/SparkArrowFlight/src/main/python/spark_flight_connector.py" \
-     /home/bryan/projects/SparkArrowFlight/src/main/python/flight_example.py
+    --jars "target/FlightConnector-1.0-SNAPSHOT.jar,$M2_LOCAL_REPO/org/apache/arrow/arrow-flight/0.13.0-SNAPSHOT/arrow-flight-0.13.0-SNAPSHOT-shaded.jar,$M2_LOCAL_REPO/org/apache/arrow/arrow-flight/0.13.0-SNAPSHOT/arrow-flight-0.13.0-SNAPSHOT-jar-with-dependencies.jar" \
+    --py-files "src/main/python/spark_flight_connector.py" \
+     src/main/python/flight_example.py
