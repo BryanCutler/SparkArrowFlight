@@ -3,7 +3,6 @@ package bryan
 import scopt.OptionParser
 
 import org.apache.arrow.flight.{Location, FlightServer}
-import org.apache.arrow.flight.auth.ServerAuthHandler
 import org.apache.arrow.flight.example.InMemoryStore
 import org.apache.arrow.memory.{BufferAllocator, RootAllocator}
 import org.apache.arrow.util.AutoCloseables
@@ -12,7 +11,7 @@ import org.apache.arrow.util.AutoCloseables
 class SparkFlightServer(incomingAllocator: BufferAllocator, val location: Location) extends AutoCloseable {
   private val allocator = incomingAllocator.newChildAllocator("spark-flight-server", 0, Long.MaxValue)
   private val mem = new InMemoryStore(this.allocator, location)
-  private val flightServer = new FlightServer(allocator, location.getPort, mem, ServerAuthHandler.NO_OP)
+  private val flightServer = FlightServer.builder(allocator, location, mem).build()
 
   def start(): Unit = {
     println("Spark Flight server starting")
@@ -54,7 +53,7 @@ object SparkFlightServer {
 
   def run(config: Config): Unit = {
     val allocator = new RootAllocator(Long.MaxValue)
-    val location = new Location(config.host, config.port)
+    val location = Location.forGrpcInsecure(config.host, config.port)
 
     val server = new SparkFlightServer(allocator, location)
     server.start()

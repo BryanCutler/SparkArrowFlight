@@ -8,7 +8,7 @@ import scala.collection.JavaConverters._
 import scopt.OptionParser
 
 import org.apache.arrow.flight._
-import org.apache.arrow.memory.{BaseAllocator, BufferAllocator, RootAllocator}
+import org.apache.arrow.memory.{BufferAllocator, RootAllocator}
 import org.apache.arrow.util.AutoCloseables
 import org.apache.arrow.vector.{VectorLoader, VectorSchemaRoot, VectorUnloader}
 import org.apache.arrow.vector.ipc.ArrowStreamWriter
@@ -18,7 +18,7 @@ import org.apache.spark.network.util.JavaUtils
 class FlightToStream(incomingAllocator: BufferAllocator, location: Location) extends AutoCloseable {
 
   private val allocator = incomingAllocator.newChildAllocator("flight-to-stream-client", 0, Long.MaxValue)
-  private val client = new FlightClient(allocator, location)
+  private val client = FlightClient.builder(allocator, location).build()
 
   def getFlightInfo(descriptor: FlightDescriptor): FlightInfo = {
     client.getInfo(descriptor)
@@ -38,10 +38,11 @@ class FlightToStream(incomingAllocator: BufferAllocator, location: Location) ext
       }
 
       locations.foreach { l =>
-        val readClient = if (location.getHost == l.getHost && location.getPort == l.getPort) {
+        val readClient = if (location.getUri.getHost == l.getUri.getHost &&
+            location.getUri.getPort == l.getUri.getPort) {
           client
         } else {
-          new FlightClient(allocator, l)  // TODO: need to close
+          FlightClient.builder(allocator, l).build()  // TODO: need to close
         }
         val stream = readClient.getStream(endpoint.getTicket)
         val root = stream.getRoot
@@ -87,7 +88,7 @@ object FlightToStream {
         .action((x, c) => c.copy(flightDescriptor = x))
     }
 
-    System.setProperty(BaseAllocator.DEBUG_ALLOCATOR, "true")
+    //System.setProperty(BaseAllocator.DEBUG_ALLOCATOR, "true")
 
     val defaultConfig = Config()
     parser.parse(args, defaultConfig) match {
@@ -99,7 +100,7 @@ object FlightToStream {
 
   def run(config: Config): Unit = {
     val allocator = new RootAllocator(Long.MaxValue)
-    val location = new Location(config.host, config.port)
+    val location = Location.forGrpcInsecure(config.host, config.port)
     val client = new FlightToStream(allocator, location)
 
     new Thread("flight-to-stream-server") {
