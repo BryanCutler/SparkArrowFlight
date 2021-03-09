@@ -33,4 +33,3 @@ service and then create pyarrow and TensorFlow clients to conusume it.
 ```bash
 $ bin/run_flight_example.sh
 ```
->>>>>>> 051176b (Updated for Spark 3.1.1, made seperate script to run service, added pyarrow client read)
