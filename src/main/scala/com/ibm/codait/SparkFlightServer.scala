@@ -1,4 +1,4 @@
-package bryan
+package com.ibm.codait
 
 import scopt.OptionParser
 
@@ -14,7 +14,6 @@ class SparkFlightServer(incomingAllocator: BufferAllocator, val location: Locati
   private val flightServer = FlightServer.builder(allocator, location, mem).build()
 
   def start(): Unit = {
-    println("Spark Flight server starting")
     flightServer.start()
   }
 
@@ -56,6 +55,7 @@ object SparkFlightServer {
     val location = Location.forGrpcInsecure(config.host, config.port)
 
     val server = new SparkFlightServer(allocator, location)
+    println(s"Spark Flight server starting on ${config.host}:${config.port}")
     server.start()
 
     Runtime.getRuntime().addShutdownHook(

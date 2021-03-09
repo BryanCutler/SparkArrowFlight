@@ -4,5 +4,5 @@ class SparkFlightConnector(object):
     @staticmethod
     def put(dataframe, host, port, descriptor):
         sc = dataframe._sc
-        jconn = sc._jvm.bryan.SparkFlightConnector()
-        jconn.put(dataframe._jdf, host, port, descriptor)
+        jconn = sc._jvm.com.ibm.codait.SparkFlightConnector()
+        jconn.put(dataframe._jdf, host, int(port), descriptor)

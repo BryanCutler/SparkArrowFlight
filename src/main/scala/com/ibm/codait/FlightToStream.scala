@@ -1,4 +1,4 @@
-package bryan
+package com.ibm.codait
 
 import java.io.BufferedOutputStream
 import java.net.{InetAddress, ServerSocket, Socket}

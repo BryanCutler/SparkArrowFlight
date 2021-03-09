@@ -1,4 +1,4 @@
-package bryan
+package com.ibm.codait
 
 import scala.collection.JavaConverters._
 import org.apache.arrow.flight.{AsyncPutListener, FlightClient, FlightDescriptor, Location}

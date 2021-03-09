@@ -1,0 +1,5 @@
+pyspark >=3.1.1
+pandas
+pyarrow
+tensorflow  # optional
+tensorflow-io  # optional

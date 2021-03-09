@@ -5,8 +5,8 @@ import subprocess
 def start_flight_to_stream(host, port, flight_descriptor):
     proc = subprocess.Popen([
         'java',
-        '-cp', 'target/FlightConnector-1.0-SNAPSHOT-jar-with-dependencies.jar',
-        'bryan.FlightToStream',
+        '-cp', 'target/SparkFlightConnector-1.0-SNAPSHOT.jar',
+        'com.ibm.codait.FlightToStream',
         '--host', host,
         '--port', str(port),
         '--stream-port', '8889',

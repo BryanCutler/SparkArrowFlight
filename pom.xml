@@ -3,11 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>18</version>
-  </parent>
+
   <licenses>
     <license>
       <name>Apache 2.0 License</name>
@@ -16,8 +12,8 @@
     </license>
   </licenses>
 
-  <groupId>org.apache.spark</groupId>
-  <artifactId>FlightConnector</artifactId>
+  <groupId>com.ibm.codait</groupId>
+  <artifactId>SparkFlightConnector</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
@@ -26,7 +22,7 @@
     <scala.version>2.12.10</scala.version>
     <scala.binary.version>2.12</scala.binary.version>
     <dep.arrow.version>2.0.0</dep.arrow.version>
-    <dep.spark.version>3.1.0</dep.spark.version>
+    <dep.spark.version>3.1.1</dep.spark.version>
     <dep.fbs.version>1.9.0</dep.fbs.version>
     <dep.flatc.version>1.9.0</dep.flatc.version>
   </properties>
@@ -58,11 +54,6 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-actors</artifactId>
-      <version>${scala.version}</version>
-    </dependency-->
     <dependency>
       <groupId>org.scala-lang.modules</groupId>
       <artifactId>scala-parser-combinators_${scala.binary.version}</artifactId>
@@ -73,37 +64,6 @@
       <artifactId>jline</artifactId>
       <version>2.14.6</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_${scala.binary.version}</artifactId>
-      <version>3.2.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatestplus</groupId>
-      <artifactId>scalatestplus-scalacheck_${scala.binary.version}</artifactId>
-      <version>3.1.0.0-RC2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatestplus</groupId>
-      <artifactId>scalatestplus-mockito_${scala.binary.version}</artifactId>
-      <version>1.0.0-SNAP5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatestplus</groupId>
-      <artifactId>scalatestplus-selenium_${scala.binary.version}</artifactId>
-      <version>1.0.0-SNAP5</version>
-      <scope>test</scope>
-    </dependency-->
-
-    <!--dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-transport-native-epoll</artifactId>
-      <version>4.1.27.Final</version>
-      <classifier>linux-x86_64</classifier>
-    </dependency-->
 
     <dependency>
       <groupId>com.github.scopt</groupId>
@@ -115,6 +75,7 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_2.12</artifactId>
       <version>${dep.spark.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -151,19 +112,22 @@
 
     <dependency>
       <groupId>org.apache.arrow</groupId>
-      <artifactId>flight-grpc</artifactId>
+      <artifactId>flight-core</artifactId>
       <version>${dep.arrow.version}</version>
+      <classifier>jar-with-dependencies</classifier>
       <exclusions>
         <exclusion>
           <groupId>io.netty</groupId>
-          <artifactId>netty-buffer</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-common</artifactId>
+          <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
+
+    <!--dependency>
+      <groupId>org.apache.arrow</groupId>
+      <artifactId>flight-grpc</artifactId>
+      <version>${dep.arrow.version}</version>
+    </dependency-->
 
   </dependencies>
 
@@ -237,54 +201,23 @@
           </compilerPlugins>
         </configuration>
       </plugin>
-      <!--plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <version>2.15.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin-->
 
-      <!--plugin>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest-maven-plugin</artifactId>
-        <version>1.0</version>
-        <configuration>
-        </configuration>
-        <executions>
-          <execution>
-            <id>test</id>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin-->
-
-      <!--plugin>
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-        </configuration>
         <executions>
           <execution>
-            <id>make-assembly</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
           </execution>
         </executions>
-      </plugin-->
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
 
     </plugins>
 
